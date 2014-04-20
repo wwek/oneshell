@@ -10,10 +10,27 @@ oneshell
 
 init.sh
 --------
-初始化CentOS linux生产环境。
-包括内容有：
+初始化CentOS linux生产环境。只能用于新系统初始化。
+其中包括内容有：
+设置时区为UTC+8,ntpdate 同步
+禁用SeLinux
+yum 安装常用库
+禁用ipv6
+优化打开文件数
+禁用不必要的services
+优化sysctl
 
 rmamp.sh
 --------
 删除yum二进制包方式安装的apache（httd），mysql，php
+
+lnmp2centos.sh
+==============
+本LNMP一键安装脚本，安装的软件为：
+Nginx(Tengine new)：       使用最新版，Tengine是taobao维护的版本，全兼容nginx的配置，更多特性，推荐使用。
+MySQL(Percona Server5.5)： "Percona Server" oschina、douban都在使用，我也选她。全兼容官方mysql配置。 
+PHP(php5.5.x)              使用php5.5.x最新版。
+
+
+参考lnmp.org定制本一键脚本。
 
