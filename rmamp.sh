@@ -1,18 +1,22 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
+
 cat << EOF
 +--------------------------------------------------------------+
 | === Remove Bin apache(httpd),mysql,php === |
 +--------------http://www.iamle.com------------------------+
 +----------------------Author:wwek--------------------------+
 EOF
+
 # Check if user is root
 if [ $(id -u) != "0" ]; then
     echo "Error: You must be root to run this script, please use root"
     exit 1
 fi
+
 #Remove Bin apache(httpd),mysql,php
+
 function RmampRemove()
 {
     rpm -qa|grep httpd

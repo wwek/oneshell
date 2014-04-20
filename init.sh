@@ -1,14 +1,19 @@
-#!/bin/sh
-# desc: lsm03624 modified by www.webnginx.com
-#-------------------cut begin-------------------------------------------
-#welcome
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+
 cat << EOF
 +--------------------------------------------------------------+
 | === Welcome to Centos System init === |
-+--------------http://www.linuxtone.org------------------------+
-+----------------------Author:NetSeek--------------------------+
++--------------http://www.iamle.com------------------------+
++----------------------Author:wwek--------------------------+
 EOF
 
+# Check if user is root
+if [ $(id -u) != "0" ]; then
+    echo "Error: You must be root to run this script, please use root"
+    exit 1
+fi
 
 function InitInstall()
 {
@@ -24,36 +29,20 @@ function InitInstall()
 	ntpdate -u pool.ntp.org
 	date
 
-	rpm -qa|grep httpd
-	rpm -e httpd
-	rpm -qa|grep mysql
-	rpm -e mysql
-	rpm -qa|grep php
-	rpm -e php
-
-	yum -y remove httpd*
-	yum -y remove php*
-	yum -y remove mysql-server mysql
-	yum -y remove php-mysql
-
-	yum -y install yum-fastestmirror
-	yum -y remove httpd
-	#yum -y update
-
 	#Disable SeLinux
 	if [ -s /etc/selinux/config ]; then
 	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 	fi
 
-	cp /etc/yum.conf /etc/yum.conf.lnmp
+	cp /etc/yum.conf /etc/yum.conf.backup
 	sed -i 's:exclude=.*:exclude=:g' /etc/yum.conf
 
-	for packages in patch make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap lrzsz subversion vim setuptool ntsysv system-config-firewall-tui system-config-network-tui;
+	for packages in patch make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap expat expat-devel lrzsz subversion git vim setuptool ntsysv system-config-firewall-tui system-config-network-tui;
 	do yum -y install $packages; done
 
-	mv -f /etc/yum.conf.lnmp /etc/yum.conf
+	mv -f /etc/yum.conf.backup /etc/yum.conf
 }
-InitInstall 2>&1 | tee /root/init-install.log
+InitInstall 2>&1 | tee /tmp/init-install.log
 
 #disable ipv6
 cat << EOF
