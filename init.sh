@@ -4,7 +4,7 @@ export PATH
 
 cat << EOF
 +--------------------------------------------------------------+
-| === Welcome to Centos System init === |
+| ===  Centos System init === |
 +--------------http://www.iamle.com------------------------+
 +----------------------Author:wwek--------------------------+
 EOF
@@ -32,22 +32,21 @@ function InitInstall()
 	#Disable SeLinux
 	if [ -s /etc/selinux/config ]; then
 	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+	echo "selinux is disabled,you must reboot!"
 	fi
 
 	cp /etc/yum.conf /etc/yum.conf.backup
 	sed -i 's:exclude=.*:exclude=:g' /etc/yum.conf
 
-	for packages in patch make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap expat expat-devel lrzsz subversion git vim setuptool ntsysv system-config-firewall-tui system-config-network-tui;
+	for packages in patch make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel freetype freetype-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal nano fonts-chinese gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap expat expat-devel perl-devel lrzsz subversion vim setuptool ntsysv system-config-firewall-tui system-config-network-tui;
 	do yum -y install $packages; done
 
 	mv -f /etc/yum.conf.backup /etc/yum.conf
-}
-InitInstall 2>&1 | tee /tmp/init-install.log
 
 #disable ipv6
 cat << EOF
 +--------------------------------------------------------------+
-| === Welcome to Disable IPV6 === |
+| ===  Disable IPV6 === |
 +--------------------------------------------------------------+
 EOF
 echo "alias net-pf-10 off" >> /etc/modprobe.conf
@@ -55,25 +54,25 @@ echo "alias ipv6 off" >> /etc/modprobe.conf
 /sbin/chkconfig --level 35 ip6tables off
 echo "ipv6 is disabled!"
 
-#disable selinux
-sed -i '/SELINUX/s/enforcing/disabled/' /etc/selinux/config
-echo "selinux is disabled,you must reboot!"
-
 #vim
 sed -i "8 s/^/alias vi='vim'/" /root/.bashrc
 echo 'syntax on' > /root/.vimrc
 
 #zh_cn
 #sed -i -e 's/^LANG=.*/LANG="zh_CN.UTF-8"/' /etc/sysconfig/i18n
-# configure file max to 52100
+
+# configure open file limit
 echo "* soft nofile 52100
 * hard nofile 52100" >> /etc/security/limits.conf
+echo ulimit -HSn 65536 >> /etc/rc.local
+echo ulimit -HSn 65536 >> /root/.bash_profile
+ulimit -HSn 65536
 
 #tunoff services
 #--------------------------------------------------------------------------------
 cat << EOF
 +--------------------------------------------------------------+
-| === Welcome to Tunoff services === |
+| === Tunoff services === |
 +--------------------------------------------------------------+
 EOF
 #---------------------------------------------------------------------------------
@@ -94,6 +93,13 @@ service $CURSRV stop
 ;;
 esac
 done
+
+}
+InitInstall 2>&1 | tee /tmp/init-install.log
+
+
+
+
 
 rm -rf /etc/sysctl.conf
 echo "net.ipv4.ip_forward = 0
@@ -123,15 +129,9 @@ net.ipv4.tcp_synack_retries = 2
 net.ipv4.tcp_syn_retries = 2
 vm.swappiness = 6" >> /etc/sysctl.conf
 echo "optimizited kernel configure was done!"
-
 /sbin/sysctl -p /etc/sysctl.conf
 /sbin/sysctl -w net.ipv4.route.flush=1
-
-echo ulimit -HSn 65536 >> /etc/rc.local
-echo ulimit -HSn 65536 >> /root/.bash_profile
-ulimit -HSn 65536
-
-echo "all yess"
+echo "finish all init,just work!"
 
 
 
