@@ -11,3 +11,9 @@ oneshell
 init.sh
 --------
 初始化CentOS linux生产环境。
+包括内容有：
+
+rmamp.sh
+--------
+删除yum二进制包方式安装的apache（httd），mysql，php
+
