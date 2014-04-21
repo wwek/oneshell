@@ -86,7 +86,7 @@ CURSRV=`echo $i|cut -c 15-`
 
 echo $CURSRV
 case $CURSRV in
-cpuspeed | crond | irqbalance | microcode_ctl | mysqld | network | nginx | httpd | php-fpm | sendmail | sshd | syslog | snmpd )
+cpuspeed | crond | irqbalance | microcode_ctl | mysqld | mysql | network | nginx | httpd | php-fpm | sendmail | sshd | syslog | rsyslog | snmpd )
 #这个启动的系统服务根据具体的应用情况设置，其中network、sshd、syslog是三项必须要启动的系统服务！
 echo "Base services, Skip!"
 ;;
