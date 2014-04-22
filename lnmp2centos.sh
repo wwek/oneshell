@@ -289,6 +289,7 @@ cd $cur_dir
 cp conf/tz.php /data/wwwroot/default/tz.php
 
 cp conf/index.html /data/wwwroot/default/index.html
+}
 
 function AddAndStartup()
 {
