@@ -8,22 +8,22 @@ fi
 
 clear
 echo "========================================================================="
-echo "Add Virtual Host for LNMP V1.0  ,  Written by Licess "
+echo "Add Virtual Host for  "
 echo "========================================================================="
 echo "LNMP is a tool to auto-compile & install Nginx+MySQL+PHP on Linux "
 echo "This script is a tool to add virtual host for nginx "
-echo "For more information please visit http://www.lnmp.org/"
+echo "For more information please visit http://www.iamle.com/"
 echo ""
 echo "========================================================================="
 
 if [ "$1" != "--help" ]; then
 
 
-	domain="www.lnmp.org"
+	domain="www.iamle.com"
 	echo "Please input domain:"
-	read -p "(Default domain: www.lnmp.org):" domain
+	read -p "(Default domain: www.iamle.com):" domain
 	if [ "$domain" = "" ]; then
-		domain="www.lnmp.org"
+		domain="www.iamle.com"
 	fi
 	if [ ! -f "/usr/local/nginx/conf/vhost/$domain.conf" ]; then
 	echo "==========================="
@@ -40,7 +40,7 @@ if [ "$1" != "--help" ]; then
 
 	if [ "$add_more_domainame" == 'y' ]; then
 
-	  echo "Type domainname,example(bbs.vpser.net forums.vpser.net luntan.vpser.net):"
+	  echo "Type domainname,example(bbs.iamle.com forums.iamle.com blog.iamle.com):"
 	  read moredomain
           echo "==========================="
           echo domain list="$moredomain"
@@ -48,11 +48,11 @@ if [ "$1" != "--help" ]; then
 	  moredomainame=" $moredomain"
 	fi
 
-	vhostdir="/home/wwwroot/$domain"
+	vhostdir="/data/wwwroot/$domain"
 	echo "Please input the directory for the domain:$domain :"
-	read -p "(Default directory: /home/wwwroot/$domain):" vhostdir
+	read -p "(Default directory: /data/wwwroot/$domain):" vhostdir
 	if [ "$vhostdir" = "" ]; then
-		vhostdir="/home/wwwroot/$domain"
+		vhostdir="/data/wwwroot/$domain"
 	fi
 	echo "==========================="
 	echo Virtual Host Directory="$vhostdir"
@@ -91,10 +91,10 @@ if [ "$1" != "--help" ]; then
 	  if [ "$al_name" = "" ]; then
 		al_name="$domain"
 	  fi
-	  alf="log_format  $al_name  '\$remote_addr - \$remote_user [\$time_local] \"\$request\" '
-             '\$status \$body_bytes_sent \"\$http_referer\" '
-             '\"\$http_user_agent\" \$http_x_forwarded_for';"
-	  al="access_log  /home/wwwlogs/$al_name.log  $al_name;"
+	  alf="log_format  $al_name  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+             '\$status \$body_bytes_sent "\$http_referer" '
+             '"\$http_user_agent" \$http_x_forwarded_for';"
+	  al="access_log  /data/wwwlogs/$al_name.log  $al_name;"
 	echo "==========================="
 	echo You access log file="$al_name.log"
 	echo "==========================="
@@ -121,7 +121,7 @@ fi
 
 echo "Create Virtul Host directory......"
 mkdir -p $vhostdir
-touch /home/wwwlogs/$al_name.log
+touch /data/wwwlogs/$al_name.log
 echo "set permissions of Virtual Host directory......"
 chmod -R 755 $vhostdir
 chown -R www:www $vhostdir
@@ -166,7 +166,7 @@ server
 	}
 eof
 
-cur_php_version=`/usr/local/php/bin/php -r 'echo PHP_VERSION;'`
+cur_php_version=`php -r 'echo PHP_VERSION;'`
 
 if echo "$cur_php_version" | grep -q "5.3."
 then
@@ -186,9 +186,8 @@ echo "Restart Nginx......"
 /usr/local/nginx/sbin/nginx -s reload
 
 echo "========================================================================="
-echo "Add Virtual Host for LNMP V1.0  ,  Written by Licess "
+echo "Add Virtual Host "
 echo "========================================================================="
-echo "For more information please visit http://www.lnmp.org/"
 echo ""
 echo "Your domain:$domain"
 echo "Directory of $domain:$vhostdir"
