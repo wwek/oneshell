@@ -71,7 +71,6 @@ if [ -s autoconf-2.69.tar.gz ]; then
   echo "Error: autoconf-2.69.tar.gz not found!!!download now......"
   wget -c http://dl.iamle.com/linux/soft/autoconf-2.69.tar.gz 
 # wget -c http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
- # wget -c http://soft.vpser.net/lib/autoconf/autoconf-2.13.tar.gz
 fi
 echo "============================check files=================================="
 }
@@ -199,13 +198,22 @@ sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
 sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /usr/local/php/etc/php.ini
 sed -i 's/register_long_arrays = On/;register_long_arrays = On/g' /usr/local/php/etc/php.ini
 sed -i 's/magic_quotes_gpc = On/;magic_quotes_gpc = On/g' /usr/local/php/etc/php.ini
+sed -i 's/expose_php = On/expose_php = Off/g' /usr/local/php/etc/php.ini
 sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
 
-echo "Install ZendGuardLoader for PHP 5.3"
+echo "Install  Zend OPcache for php5.5.x"
 
-echo "Write ZendGuardLoader to php.ini......"
+echo "Write  Zend OPcache to php.ini......"
 cat >>/usr/local/php/etc/php.ini<<EOF
 ;opcache
+zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20121212/opcache.so
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+opcache.enable=1
 EOF
 
 echo "Creating new php-fpm configure file......"
@@ -224,7 +232,7 @@ pm.max_children = 10
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 6
-request_terminate_timeout = 100
+request_terminate_timeout = 200
 EOF
 
 echo "Copy php-fpm init.d file......"
@@ -259,14 +267,15 @@ cd ../
 
 ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
 
-rm -f /usr/local/nginx/conf/nginx.conf
+#rm -f /usr/local/nginx/conf/nginx.conf
 mv /usr/local/nginx/conf/nginx.conf /usr/local/nginx/conf/nginx.conf.backup
 cd $cur_dir
 cp conf/nginx.conf /usr/local/nginx/conf/nginx.conf
 cp conf/none.conf /usr/local/nginx/conf/none.conf
 
 rm -f /usr/local/nginx/conf/fcgi.conf
-cp conf/fcgi.conf /usr/local/nginx/conf/fcgi.conf
+rm -f /usr/local/nginx/conf/fastcgi.conf
+cp conf/fastcgi.conf /usr/local/nginx/conf/fastcgi.conf
 
 cd $cur_dir
 cp vhost.sh /root/vhost.sh
@@ -343,22 +352,16 @@ if [ -s /usr/local/mysql ] && [ -s /usr/local/mysql/bin/mysql ]; then
   echo "Error: /usr/local/mysql not found!!!MySQL install failed."
 fi
 if [ "$isnginx" = "ok" ] && [ "$ismysql" = "ok" ] && [ "$isphp" = "ok" ]; then
-echo "Install lnmp 1.0 completed! enjoy it."
+echo "Install lnmp  completed! enjoy it."
 echo "========================================================================="
-echo "LNMP V1.0 for CentOS/RadHat Linux VPS  Written by Licess "
-echo "========================================================================="
-echo ""
-echo "For more information please visit http://www.lnmp.org/"
 echo ""
 echo "lnmp status manage: /root/lnmp {start|stop|reload|restart|kill|status}"
 echo "default mysql root password:$mysqlrootpwd"
-echo "phpinfo : http://yourIP/phpinfo.php"
-echo "phpMyAdmin : http://yourIP/phpmyadmin/"
-echo "Prober : http://yourIP/p.php"
+echo "Prober : http://yourIP/tz.php"
 echo "Add VirtualHost : /root/vhost.sh"
 echo ""
 echo "The path of some dirs:"
-echo "mysql dir:   /usr/local/mysql"
+echo "mysql data dir:   /data/mysql"
 echo "php dir:     /usr/local/php"
 echo "nginx dir:   /usr/local/nginx"
 echo "web dir :     /data/wwwroot/default"

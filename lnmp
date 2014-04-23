@@ -9,11 +9,8 @@ if [ $(id -u) != "0" ]; then
 fi
 
 printf "=========================================================================\n"
-printf "Manager for LNMP V1.0  ,  Written by Licess \n"
-printf "=========================================================================\n"
 printf "LNMP is a tool to auto-compile & install Nginx+MySQL+PHP on Linux \n"
 printf "This script is a tool to Manage status of lnmp \n"
-printf "For more information please visit http://www.lnmp.org \n"
 printf "\n"
 printf "Usage: /root/lnmp {start|stop|reload|restart|kill|status}\n"
 printf "=========================================================================\n"

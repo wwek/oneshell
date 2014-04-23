@@ -10,12 +10,9 @@ fi
 
 clear
 printf "=======================================================================\n"
-printf "Remove php disable functions for LNMP V1.0  ,  Written by Licess \n"
-printf "=======================================================================\n"
 printf "LNMP is a tool to auto-compile & install Nginx+MySQL+PHP on Linux \n"
 printf "This script is a tool to remove php disable functions for lnmp \n"
 printf "\n"
-printf "more information please visit http://www.lnmp.org \n"
 printf "=======================================================================\n"
 cur_dir=$(pwd)
         
@@ -85,10 +82,7 @@ fi
 printf "=======================================================================\n"
 printf "Remove php disable funtion completed,enjoy it!\n"
 printf "=======================================================================\n"
-printf "Remove php disable functions for LNMP V1.0  ,  Written by Licess \n"
-printf "=======================================================================\n"
 printf "LNMP is a tool to auto-compile & install Nginx+MySQL+PHP on Linux \n"
 printf "This script is a tool to remove php disable functions for lnmp \n"
 printf "\n"
-printf "For more information please visit http://www.lnmp.org \n"
 printf "=======================================================================\n"

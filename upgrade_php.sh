@@ -10,11 +10,10 @@ fi
 
 clear
 echo "========================================================================="
-echo "Upgrade PHP for LNMP,  Written by Licess"
+echo "Upgrade PHP for LNMP"
 echo "========================================================================="
 echo "LNMP is tool to auto-compile & install Nginx+MySQL+PHP on Linux "
-echo ""
-echo "For more information please visit http://www.lnmp.org/"
+echo "PHP version at php5.5.11 php5.4.27 php5.3.28"
 echo "========================================================================="
 cur_dir=$(pwd)
 
@@ -72,80 +71,36 @@ if [ -s php-$php_version.tar.gz ]; then
   fi
 fi
 
-if [ -s autoconf-2.13.tar.gz ]; then
-  echo "autoconf-2.13.tar.gz [found]"
+if [ -s autoconf-2.69.tar.gz ]; then
+  echo "autoconf-2.69.tar.gz [found]"
   else
-  echo "Error: autoconf-2.13.tar.gz not found!!!download now......"
-  wget -c http://soft.vpser.net/lib/autoconf/autoconf-2.13.tar.gz
+  echo "Error: autoconf-2.69.tar.gz not found!!!download now......"
+  wget -c http://dl.iamle.com/linux/soft/autoconf-2.69.tar.gz
+# wget -c http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
 fi
+
 echo "============================check files=================================="
 
-echo "Stoping Nginx..."
-/etc/init.d/nginx stop
-echo "Stoping MySQL..."
-/etc/init.d/mysql stop
 echo "Stoping PHP-FPM..."
 /etc/init.d/php-fpm stop
-if [ -s /etc/init.d/memceached ]; then
-  echo "Stoping Memcached..."
-  /etc/init.d/memcacehd stop
-fi
 
 rm -rf php-$php_version/
 
-tar zxvf autoconf-2.13.tar.gz
-cd autoconf-2.13/
-./configure --prefix=/usr/local/autoconf-2.13
+tar zxvf autoconf-2.69.tar.gz
+cd autoconf-2.69/
+./configure --prefix=/usr/local/autoconf-2.69
 make && make install
 cd ../
 
 ln -s /usr/lib/libevent-1.4.so.2 /usr/local/lib/libevent-1.4.so.2
 ln -s /usr/lib/libltdl.so /usr/lib/libltdl.so.3
 
-if [ $php_version = "5.2.14" ] || [ $php_version = "5.2.15" ] || [ $php_version = "5.2.16" ] || [ $php_version = "5.2.17" ]; then
+if [ $php_version = "5.4.27" ] || [ $php_version = "5.3.28" ]; then
 
-if [ -s php-$php_version-fpm-0.5.14.diff.gz ]; then
-  echo "php-$php_version-fpm-0.5.14.diff.gz [found]"
-  else
-  echo "Error: php-$php_version-fpm-0.5.14.diff.gz not found!!!download now......"
-  wget -c http://php-fpm.org/downloads/php-$php_version-fpm-0.5.14.diff.gz
-fi
-
-cd $cur_dir
-echo "Stop php-fpm....."
-if [ -s /usr/local/php/sbin/php-fpm ]; then
-/usr/local/php/sbin/php-fpm stop
-else
-/etc/init.d/php-fpm stop
-fi
-
-echo "Start install php-$php_version....."
-export PHP_AUTOCONF=/usr/local/autoconf-2.13/bin/autoconf
-export PHP_AUTOHEADER=/usr/local/autoconf-2.13/bin/autoheader
-tar zxvf php-$php_version.tar.gz
-gzip -cd php-$php_version-fpm-0.5.14.diff.gz | patch -d php-$php_version -p1
-cd php-$php_version/
-wget -c http://soft.vpser.net/web/php/bug/php-5.2.17-max-input-vars.patch
-patch -p1 < php-5.2.17-max-input-vars.patch
-./buildconf --force
-./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql=/usr/local/mysql --with-mysqli=/usr/local/mysql/bin/mysql_config --with-iconv-dir --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-discard-path --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --with-curlwrappers --enable-mbregex --enable-fastcgi --enable-fpm --enable-force-cgi-redirect --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --with-mime-magic
-if cat /etc/issue | grep -Eqi '(Debian|Ubuntu)';then
-    cd ext/openssl/
-    wget -c http://soft.vpser.net/lnmp/ext/debian_patches_disable_SSLv2_for_openssl_1_0_0.patch
-    patch -p3 <debian_patches_disable_SSLv2_for_openssl_1_0_0.patch
-    cd ../../
-fi
-make ZEND_EXTRA_LIBS='-liconv'
-make install
-
-/usr/local/php/sbin/php-fpm start
-wget -c http://soft.vpser.net/lnmp/ext/init.d.php-fpm5.2
-cp init.d.php-fpm5.2 /etc/init.d/php-fpm
-chmod +x /etc/init.d/php-fpm
 
 sleep 2
 
-elif [ $php_version = "5.3.0" ] || [ $php_version = "5.3.1" ] || [ $php_version = "5.3.2" ]; then
+elif [ $php_version = "5.5.11" ]; then
 
 echo "DO NOT SUPPORT PHP VERSION :$php_version"
 echo "Waiting for script to EXIT......"
@@ -284,16 +239,8 @@ chkconfig --level 345 php-fpm on
 chkconfig --level 345 nginx on
 fi
 
-echo "Starting Nginx..."
-/etc/init.d/nginx start
-echo "Starting MySQL..."
-/etc/init.d/mysql start
 echo "Starting PHP-FPM..."
 /etc/init.d/php-fpm start
-if [ -s /etc/init.d/memceached ]; then
-  echo "Starting Memcached..."
-  /etc/init.d/memcacehd start
-fi
 
 fi
 
@@ -304,8 +251,6 @@ echo "You have successfully upgrade from $old_php_version to $php_version"
 echo "========================================================================="
 echo "LNMP is tool to auto-compile & install Nginx+MySQL+PHP on Linux "
 echo "========================================================================="
-echo ""
-echo "For more information please visit http://www.lnmp.org/"
 echo ""
 echo "========================================================================="
 fi

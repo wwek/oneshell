@@ -1,9 +1,8 @@
 #!/bin/bash
-#function:cut nginx log files for lnmp v0.5 and v0.6
-#author: http://lnmp.org
+#function:cut nginx log files 
 
 #set the path to nginx log files
-log_files_path="/home/wwwlogs/"
+log_files_path="/data/wwwlogs/"
 log_files_dir=${log_files_path}$(date -d "yesterday" +"%Y")/$(date -d "yesterday" +"%m")
 #set nginx log files you want to cut
 log_files_name=(access vpser licess)
