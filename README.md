@@ -38,7 +38,7 @@ MySQL(Percona Server5.6)： "Percona Server" oschina、douban都在使用，我�
 PHP(php5.5.x)              使用php5.5.x最新版。  
 
 使用方法：  
-wget -c https://github.com/wwek/oneshell/archive/master.zip;yum -y install  unzip;unzip master.zip;cd oneshell-master;sh init.sh;sh lnmp2centos.sh  
+wget -c https://github.com/wwek/oneshell/archive/master.zip; yum -y install  unzip;unzip master.zip;cd oneshell-master;sh init.sh;sh lnmp2centos.sh  
 特别注意：lnmp2centos.sh 不能单独使用，必须和 init.sh 配合使用。  
 
 参考
