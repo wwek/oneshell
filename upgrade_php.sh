@@ -13,7 +13,7 @@ echo "========================================================================="
 echo "Upgrade PHP for LNMP"
 echo "========================================================================="
 echo "LNMP is tool to auto-compile & install Nginx+MySQL+PHP on Linux "
-echo "PHP version at php5.5.11 php5.4.27 php5.3.28"
+echo "PHP version at php5.5.12 php5.4.27 php5.3.28"
 echo "========================================================================="
 cur_dir=$(pwd)
 
@@ -100,12 +100,11 @@ if [ $php_version = "5.4.27" ] || [ $php_version = "5.3.28" ]; then
 
 sleep 2
 
-elif [ $php_version = "5.5.11" ]; then
-
-echo "DO NOT SUPPORT PHP VERSION :$php_version"
-echo "Waiting for script to EXIT......"
-sleep 2
-exit 1
+#elif [ $php_version = "5.5.12" ]; then
+#echo "DO NOT SUPPORT PHP VERSION :$php_version"
+#echo "Waiting for script to EXIT......"
+#sleep 2
+#exit 1
 
 else
 
@@ -115,23 +114,26 @@ mkdir -p /root/phpconf
 cp /usr/local/php/etc/php-fpm.conf /root/phpconf/php-fpm.conf.old.bak
 cp /usr/local/php/etc/php.ini /root/phpconf/php.ini.old.bak
 cp /root/lnmp /root/phpconf/lnmp
-rm -f /root/lnmp
+#rm -f /root/lnmp
 /usr/local/php/sbin/php-fpm stop
-rm -rf /usr/local/php/
+mv -rf /usr/local/php/ /usr/local/oldphp/
 cp /etc/init.d/php-fpm /root/phpconf/php-fpm.old.bak
 rm -f /etc/init.d/php-fpm
 
+echo "============================Install PHP $php_version================================"
 cd $cur_dir
-export PHP_AUTOCONF=/usr/local/autoconf-2.13/bin/autoconf
-export PHP_AUTOHEADER=/usr/local/autoconf-2.13/bin/autoheader
-
-echo "Starting install php......"
+export PHP_AUTOCONF=/usr/local/autoconf-2.69/bin/autoconf
+export PHP_AUTOHEADER=/usr/local/autoconf-2.69/bin/autoheader
 tar zxvf php-$php_version.tar.gz
 cd php-$php_version/
-./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-magic-quotes --enable-safe-mode --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --with-curlwrappers --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --disable-fileinfo
-
+./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --disable-fileinfo --enable-opcache
 make ZEND_EXTRA_LIBS='-liconv'
 make install
+
+rm -f /usr/bin/php
+ln -s /usr/local/php/bin/php /usr/bin/php
+ln -s /usr/local/php/bin/phpize /usr/bin/phpize
+ln -s /usr/local/php/sbin/php-fpm /usr/bin/php-fpm
 
 echo "Copy new php configure file."
 mkdir -p /usr/local/php/etc
@@ -150,43 +152,22 @@ sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /usr/local/php/etc/php.ini
 sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /usr/local/php/etc/php.ini
 sed -i 's/register_long_arrays = On/;register_long_arrays = On/g' /usr/local/php/etc/php.ini
 sed -i 's/magic_quotes_gpc = On/;magic_quotes_gpc = On/g' /usr/local/php/etc/php.ini
-sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket/g' /usr/local/php/etc/php.ini
+sed -i 's/expose_php = On/expose_php = Off/g' /usr/local/php/etc/php.ini
+sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /usr/local/php/etc/php.ini
 
-echo "Install ZendGuardLoader for PHP..."
-if [ `getconf WORD_BIT` = '32' ] && [ `getconf LONG_BIT` = '64' ] ; then
-	if [[ "$php_version" =~ "5.3." ]]; then
-		wget -c http://soft.vpser.net/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
-		tar zxvf ZendGuardLoader-php-5.3-linux-glibc23-x86_64.tar.gz
-		mkdir -p /usr/local/zend/
-		\cp ZendGuardLoader-php-5.3-linux-glibc23-x86_64/php-5.3.x/ZendGuardLoader.so /usr/local/zend/ 
-	elif [[ "$php_version" =~ "5.4." ]]; then
-		wget -c http://soft.vpser.net/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
-		tar zxvf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64.tar.gz
-		mkdir -p /usr/local/zend/
-		\cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-x86_64/php-5.4.x/ZendGuardLoader.so /usr/local/zend/ 
-	fi
-else
-	if [[ "$php_version" =~ "5.3." ]]; then
-		wget -c http://soft.vpser.net/web/zend/ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
-		tar zxvf ZendGuardLoader-php-5.3-linux-glibc23-i386.tar.gz
-		mkdir -p /usr/local/zend/
-		\cp ZendGuardLoader-php-5.3-linux-glibc23-i386/php-5.3.x/ZendGuardLoader.so /usr/local/zend/ 
-	elif [[ "$php_version" =~ "5.4." ]]; then
-		wget -c http://soft.vpser.net/web/zend/ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
-		tar zxvf ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386.tar.gz
-		mkdir -p /usr/local/zend/
-		\cp ZendGuardLoader-70429-PHP-5.4-linux-glibc23-i386/php-5.4.x/ZendGuardLoader.so /usr/local/zend/ 
-	fi
-fi
+echo "Install  Zend OPcache for php5.5.x"
 
-echo "Write ZendGuardLoader to php.ini......"
+echo "Write  Zend OPcache to php.ini......"
 cat >>/usr/local/php/etc/php.ini<<EOF
-;eaccelerator
-
-;ionCube
-
-[Zend Optimizer] 
-zend_extension=/usr/local/zend/ZendGuardLoader.so
+;opcache
+zend_extension=/usr/local/php/lib/php/extensions/no-debug-non-zts-20121212/opcache.so
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+opcache.enable=0
 EOF
 
 echo "Creating new php-fpm configure file......"
@@ -201,51 +182,27 @@ listen = /tmp/php-cgi.sock
 user = www
 group = www
 pm = dynamic
-pm.max_children = 20
+pm.max_children = 10
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 6
-request_terminate_timeout = 100
+request_terminate_timeout = 200
 EOF
 
 echo "Copy php-fpm init.d file......"
 cp $cur_dir/php-$php_version/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
 chmod +x /etc/init.d/php-fpm
 
-echo "download new lnmp manager......"
-wget -c http://soft.vpser.net/lnmp/ext/lnmp4php5.3
-cp lnmp4php5.3 /root/lnmp
+cp $cur_dir/lnmp /root/lnmp
 chmod +x /root/lnmp
-
-
-echo "Remove old start files and Add new start file....."
-if [ -s /etc/debian_version ]; then
-update-rc.d -f nginx.sh remove
-if [ -s /etc/init.d/nginx.sh ]; then
-  echo "Download new nginx init.d file......"
-  wget -c http://soft.vpser.net/lnmp/ext/init.d.nginx
-  cp init.d.nginx /etc/init.d/nginx
-  chmod +x /etc/init.d/nginx
-  rm -f /etc/init.d/nginx.sh
-  update-rc.d -f nginx defaults
-fi
-update-rc.d -f php-fpm defaults
-elif [ -s /etc/redhat-release ]; then
-sed -i '/php-fpm/'d /etc/rc.local
-sed -i '/nginx/'d /etc/rc.local
-#echo "/etc/init.d/nginx start" >>/etc/rc.local
-#echo "/etc/init.d/php-fpm start" >>/etc/rc.local
-chkconfig --level 345 php-fpm on
-chkconfig --level 345 nginx on
-fi
-
+sed -i 's:/usr/local/php/logs:/usr/local/php/var/run:g' /root/lnmp
+echo "============================PHP $php_version install completed======================"
 echo "Starting PHP-FPM..."
 /etc/init.d/php-fpm start
 
-fi
 
 cd $cur_dir
-
+fi
 echo "========================================================================="
 echo "You have successfully upgrade from $old_php_version to $php_version"
 echo "========================================================================="
