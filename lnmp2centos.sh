@@ -25,7 +25,7 @@ if [ -s pcre-8.35.tar.gz ]; then
   echo "pcre-8.35.tar.gz [found]"
   else
   echo "Error: pcre-8.35.tar.gz not found!!!download now......"
-  wget -c ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.35.tar.gz
+  wget -c  http://dl.iamle.com/linux/soft/pcre-8.35.tar.gz 
 fi
 
 if [ -s tengine-2.0.2.tar.gz ]; then
@@ -39,28 +39,29 @@ if [ -s libiconv-1.14.tar.gz ]; then
   echo "libiconv-1.14.tar.gz [found]"
   else
   echo "Error: libiconv-1.14.tar.gz not found!!!download now......"
-  wget -c http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
+  wget -c http://dl.iamle.com/linux/soft/libiconv-1.14.tar.gz
+  #wget -c http://ftp.gnu.org/gnu/libiconv/libiconv-1.14.tar.gz
 fi
 
 if [ -s libmcrypt-2.5.8.tar.gz ]; then
   echo "libmcrypt-2.5.8.tar.gz [found]"
   else
   echo "Error: libmcrypt-2.5.8.tar.gz not found!!!download now......"
-  wget -c "http://sourceforge.net/projects/mcrypt/files/Libmcrypt/2.5.8/libmcrypt-2.5.8.tar.gz/download"
+  wget -c http://dl.iamle.com/linux/soft/libmcrypt-2.5.8.tar.gz
 fi
 
 if [ -s mhash-0.9.9.9.tar.gz ]; then
   echo "mhash-0.9.9.9.tar.gz [found]"
   else
   echo "Error: mhash-0.9.9.9.tar.gz not found!!!download now......"
-  wget -c "http://sourceforge.net/projects/mhash/files/mhash/0.9.9.9/mhash-0.9.9.9.tar.gz/download"
+  wget -c http://dl.iamle.com/linux/soft/mhash-0.9.9.9.tar.gz
 fi
 
 if [ -s mcrypt-2.6.8.tar.gz ]; then
   echo "mcrypt-2.6.8.tar.gz [found]"
   else
   echo "Error: mcrypt-2.6.8.tar.gz not found!!!download now......"
-  wget -c "http://sourceforge.net/projects/mcrypt/files/MCrypt/2.6.8/mcrypt-2.6.8.tar.gz/download"
+  wget -c http://dl.iamle.com/linux/soft/mcrypt-2.6.8.tar.gz
 #wget -c http://soft.vpser.net/web/mcrypt/mcrypt-2.6.8.tar.gz
 fi
 
@@ -68,8 +69,9 @@ if [ -s autoconf-2.69.tar.gz ]; then
   echo "autoconf-2.69.tar.gz [found]"
   else
   echo "Error: autoconf-2.69.tar.gz not found!!!download now......"
-  wget -c http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
-#  wget -c http://soft.vpser.net/lib/autoconf/autoconf-2.13.tar.gz
+  wget -c http://dl.iamle.com/linux/soft/autoconf-2.69.tar.gz 
+# wget -c http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+ # wget -c http://soft.vpser.net/lib/autoconf/autoconf-2.13.tar.gz
 fi
 echo "============================check files=================================="
 }
