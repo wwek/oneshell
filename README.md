@@ -28,9 +28,12 @@ lnmp2centos.sh
 ==============
 本LNMP一键安装脚本，安装的软件为：
 Nginx(Tengine new)：       使用最新版，Tengine是taobao维护的版本，全兼容nginx的配置，更多特性，推荐使用。
-MySQL(Percona Server5.5)： "Percona Server" oschina、douban都在使用，我也选她。全兼容官方mysql配置。 
+MySQL(Percona Server5.6)： "Percona Server" oschina、douban都在使用，我也选她。全兼容官方mysql配置。
 PHP(php5.5.x)              使用php5.5.x最新版。
 
+使用方法：
+wget -c https://github.com/wwek/oneshell/archive/master.zip;yum -y install  unzip;unzip master.zip;cd oneshell-master;sh init.sh;sh lnmp2centos.sh
+特别注意：lnmp2centos.sh 不能单独使用，必须和 init.sh 配合使用。
 
 参考lnmp.org定制本一键脚本。
 
