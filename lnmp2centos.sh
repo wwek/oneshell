@@ -10,6 +10,18 @@ fi
 
 clear
 cur_dir=$(pwd)
+#set mysql root password
+	echo "==========================="
+
+	mysqlrootpwd="root"
+	echo "Please input the root password of mysql:"
+	read -p "(Default password: root):" mysqlrootpwd
+	if [ "$mysqlrootpwd" = "" ]; then
+		mysqlrootpwd="root"
+	fi
+	echo "==========================="
+	echo "MySQL root password:$mysqlrootpwd"
+	echo "==========================="
 
 function CheckAndDownloadFiles()
 {
@@ -168,17 +180,17 @@ fi
 
 yum list | grep percona
 yum -y install Percona-Server-client-56 Percona-Server-server-56 Percona-Server-shared-56
-mv /var/lib/mysql/ /data/
-rm -f /etc/my.cnf
-mv conf/my.cnf /etc/
+#mv /var/lib/mysql/ /data/
+#rm -f /etc/my.cnf
+mv /etc/my.cnf /etc/my.cnf.backup
+cp -f conf/my.cnf /etc/
 mkdir -p /data/mysql
 /usr/bin/mysql_install_db --defaults-file=/etc/my.cnf  --datadir=/data/mysql --user=mysql
 chown -R mysql /data/mysql
 chgrp -R mysql /data/mysql
 chown -R mysql:mysql /data/mysql
 /etc/init.d/mysql start
-/usr/bin/mysqladmin -u root password $mysqlrootpwd
-
+/usr/bin/mysqladmin -u root password $mysqlrootpwd -S /tmp/mysql.sock
 cat > /tmp/mysql_sec_script<<EOF
 use mysql;
 update user set password=password('$mysqlrootpwd') where user='root';
@@ -189,14 +201,11 @@ DROP USER ''@'%';
 flush privileges;
 EOF
 
-/usr/bin/mysql -u root -p$mysqlrootpwd -h localhost < /tmp/mysql_sec_script
+/usr/bin/mysql -u root -p$mysqlrootpwd -h localhost -S /tmp/mysql.sock  < /tmp/mysql_sec_script
 
 rm -f /tmp/mysql_sec_script
 
 /etc/init.d/mysql restart
-/etc/init.d/mysql stop
-/etc/init.d/mysql restart
-/etc/init.d/mysql stop
 echo "============================MySQL 5.6 install completed========================="
 }
 
@@ -249,7 +258,7 @@ opcache.max_accelerated_files=4000
 opcache.revalidate_freq=60
 opcache.fast_shutdown=1
 opcache.enable_cli=1
-opcache.enable=1
+opcache.enable=0
 EOF
 
 echo "Creating new php-fpm configure file......"
