@@ -154,15 +154,51 @@ ldconfig
 }
 
 
-function InstallMySQL55()
+function InstallMySQL56()
 {
-echo "============================Install MySQL 5.5.26=================================="
+echo "============================Install MySQL 5.6=================================="
 cd $cur_dir
+if [ `getconf LONG_BIT` = '32' ]; then
+    echo "Install 32bit percona repo"
+    yum -y install http://www.percona.com/downloads/percona-release/percona-release-0.0-1.i386.rpm
+elif [ `getconf LONG_BIT` = '64' ]; then
+    echo "Install 64bit percona repo"
+    yum -y  install http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
+fi
+
+yum list | grep percona
+yum -y install Percona-Server-client-56 Percona-Server-server-56 Percona-Server-shared-56
+mv /var/lib/mysql/ /data/
+rm -f /etc/my.cnf
+mv conf/my.cnf /etc/
+mkdir -p /data/mysql
+/usr/bin/mysql_install_db --defaults-file=/etc/my.cnf  --datadir=/data/mysql --user=mysql
+chown -R mysql /data/mysql
+chgrp -R mysql /data/mysql
+chown -R mysql:mysql /data/mysql
+/etc/init.d/mysql start
+/usr/bin/mysqladmin -u root password $mysqlrootpwd
+
+cat > /tmp/mysql_sec_script<<EOF
+use mysql;
+update user set password=password('$mysqlrootpwd') where user='root';
+delete from user where not (user='root') ;
+delete from user where user='root' and password=''; 
+drop database test;
+DROP USER ''@'%';
+flush privileges;
+EOF
+
+/usr/bin/mysql -u root -p$mysqlrootpwd -h localhost < /tmp/mysql_sec_script
+
+rm -f /tmp/mysql_sec_script
+
 /etc/init.d/mysql restart
 /etc/init.d/mysql stop
-echo "============================MySQL 5.5.26 install completed========================="
+/etc/init.d/mysql restart
+/etc/init.d/mysql stop
+echo "============================MySQL 5.6 install completed========================="
 }
-
 
 function InstallPHP55()
 {
@@ -377,7 +413,7 @@ fi
 
 CheckAndDownloadFiles 2>&1 | tee -a /tmp/lnmp-install.log
 InstallDependsAndOpt 2>&1 | tee -a /tmp/lnmp-install.log
-#InstallMySQL55 2>&1 | tee -a /tmp/lnmp-install.log
+InstallMySQL56 2>&1 | tee -a /tmp/lnmp-install.log
 InstallPHP55 2>&1 | tee -a /tmp/lnmp-install.log
 InstallNginx 2>&1 | tee -a /tmp/lnmp-install.log
 CreatPHPTools 2>&1 | tee -a /tmp/lnmp-install.log
