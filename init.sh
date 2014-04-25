@@ -30,9 +30,12 @@ function InitInstall()
 	date
 
 	#Disable SeLinux
+	echo "selinux status"
+	getenforce
 	if [ -s /etc/selinux/config ]; then
 	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
-	echo "selinux is disabled,you must reboot!"
+	setenforce 0
+	echo "selinux is disabled"
 	fi
 
 	cp /etc/yum.conf /etc/yum.conf.backup
