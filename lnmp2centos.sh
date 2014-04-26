@@ -166,9 +166,9 @@ ldconfig
 }
 
 
-function InstallMySQL56()
+function InstallMySQL55()
 {
-echo "============================Install MySQL 5.6=================================="
+echo "============================Install MySQL 5.5=================================="
 cd $cur_dir
 if [ `getconf LONG_BIT` = '32' ]; then
     echo "Install 32bit percona repo"
@@ -179,7 +179,7 @@ elif [ `getconf LONG_BIT` = '64' ]; then
 fi
 
 yum list | grep percona
-yum -y install Percona-Server-client-56 Percona-Server-server-56 Percona-Server-shared-56
+yum -y install Percona-Server-client-55 Percona-Server-server-55 Percona-Server-shared-55
 #mv /var/lib/mysql/ /data/
 #rm -f /etc/my.cnf
 mv /etc/my.cnf /etc/my.cnf.backup
@@ -206,7 +206,7 @@ EOF
 rm -f /tmp/mysql_sec_script
 
 /etc/init.d/mysql restart
-echo "============================MySQL 5.6 install completed========================="
+echo "============================MySQL 5.5 install completed========================="
 }
 
 function InstallPHP55()
@@ -422,7 +422,7 @@ fi
 
 CheckAndDownloadFiles 2>&1 | tee -a /tmp/lnmp-install.log
 InstallDependsAndOpt 2>&1 | tee -a /tmp/lnmp-install.log
-InstallMySQL56 2>&1 | tee -a /tmp/lnmp-install.log
+InstallMySQL55 2>&1 | tee -a /tmp/lnmp-install.log
 InstallPHP55 2>&1 | tee -a /tmp/lnmp-install.log
 InstallNginx 2>&1 | tee -a /tmp/lnmp-install.log
 CreatPHPTools 2>&1 | tee -a /tmp/lnmp-install.log

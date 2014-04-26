@@ -39,8 +39,8 @@ PHP(php5.5.x)              使用php5.5.x最新版。
 
 使用方法：  
 wget -c https://github.com/wwek/oneshell/archive/master.zip; yum -y install  unzip;unzip master.zip;cd oneshell-master;sh init.sh;sh lnmp2centos.sh  
-特别注意：lnmp2centos.sh 不能单独使用，必须和 init.sh 配合使用。  
-
+特别注意：lnmp2centos.sh 不能单独使用，必须和 init.sh 配合使用。   
+mysql配置文件推荐使用 https://tools.percona.com/  生成，也支持原版mysql的，一样用，实际上配置都是通用的。  
 参考
 ====
 参考lnmp.org定制本一键脚本。  
