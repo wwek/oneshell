@@ -269,6 +269,9 @@ error_log = /usr/local/php/var/log/php-fpm.log
 log_level = notice
 
 [www]
+listen.owner = www
+listen.group = www
+listen.mode = 0660
 listen = /tmp/php-cgi.sock
 user = www
 group = www
