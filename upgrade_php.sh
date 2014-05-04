@@ -116,7 +116,7 @@ cp /usr/local/php/etc/php.ini /root/phpconf/php.ini.old.bak
 cp /root/lnmp /root/phpconf/lnmp
 #rm -f /root/lnmp
 /usr/local/php/sbin/php-fpm stop
-mv -rf /usr/local/php/ /usr/local/oldphp/
+mv /usr/local/php /usr/local/oldphp
 cp /etc/init.d/php-fpm /root/phpconf/php-fpm.old.bak
 rm -f /etc/init.d/php-fpm
 
@@ -131,6 +131,9 @@ make ZEND_EXTRA_LIBS='-liconv'
 make install
 
 rm -f /usr/bin/php
+rm -f /usr/bin/phpize
+rm -f /usr/bin/php-fpm
+
 ln -s /usr/local/php/bin/php /usr/bin/php
 ln -s /usr/local/php/bin/phpize /usr/bin/phpize
 ln -s /usr/local/php/sbin/php-fpm /usr/bin/php-fpm
