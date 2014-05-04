@@ -393,11 +393,11 @@ if [ -s /usr/local/php/sbin/php-fpm ] && [ -s /usr/local/php/etc/php.ini ] && [ 
   echo "Error: /usr/local/php not found!!!PHP install failed."
 fi
 
-if [ -s /usr/local/mysql ] && [ -s /usr/local/mysql/bin/mysql ]; then
+if [ -s /usr/bin/mysql ] && [ -s /etc/my.cnf ]; then
   echo "MySQL: OK"
   ismysql="ok"
   else
-  echo "Error: /usr/local/mysql not found!!!MySQL install failed."
+  echo "Error: /usr/bin/mysql not found!!!MySQL install failed."
 fi
 if [ "$isnginx" = "ok" ] && [ "$ismysql" = "ok" ] && [ "$isphp" = "ok" ]; then
 echo "Install lnmp  completed! enjoy it."
