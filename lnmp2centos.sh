@@ -40,11 +40,11 @@ if [ -s pcre-8.35.tar.gz ]; then
   wget -c  http://dl.iamle.com/linux/soft/pcre-8.35.tar.gz 
 fi
 
-if [ -s tengine-2.0.2.tar.gz ]; then
-  echo "tengine-2.0.2.tar.gz [found]"
+if [ -s tengine-2.0.3.tar.gz ]; then
+  echo "tengine-2.0.3.tar.gz [found]"
   else
-  echo "Error: tengine-2.0.2.tar.gz not found!!!download now......"
-  wget -c http://tengine.taobao.org/download/tengine-2.0.2.tar.gz
+  echo "Error: tengine-2.0.3.tar.gz not found!!!download now......"
+  wget -c http://tengine.taobao.org/download/tengine-2.0.3.tar.gz
 fi
 
 if [ -s libiconv-1.14.tar.gz ]; then
@@ -307,8 +307,8 @@ cd ../
 
 ldconfig
 
-tar zxvf tengine-2.0.2.tar.gz
-cd tengine-2.0.2/
+tar zxvf tengine-2.0.3.tar.gz
+cd tengine-2.0.3/
 ./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_gzip_static_module --with-ipv6
 make && make install
 cd ../
