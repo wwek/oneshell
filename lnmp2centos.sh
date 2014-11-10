@@ -26,11 +26,11 @@ cur_dir=$(pwd)
 function CheckAndDownloadFiles()
 {
 echo "============================check files=================================="
-if [ -s php-5.5.11.tar.gz ]; then
- echo "php-5.5.11.tar.gz [found]"
+if [ -s php-5.5.18.tar.gz ]; then
+ echo "php-5.5.18.tar.gz [found]"
 else
- echo "Error: php-5.5.11.tar.gz not found!!!download now......"
- wget -c http://www.php.net/distributions/php-5.5.11.tar.gz
+ echo "Error: php-5.5.18.tar.gz not found!!!download now......"
+ wget -c http://www.php.net/distributions/php-5.5.18.tar.gz
 fi
 
 if [ -s pcre-8.35.tar.gz ]; then
@@ -215,8 +215,8 @@ echo "============================Install PHP 5.5.11============================
 cd $cur_dir
 export PHP_AUTOCONF=/usr/local/autoconf-2.69/bin/autoconf
 export PHP_AUTOHEADER=/usr/local/autoconf-2.69/bin/autoheader
-tar zxvf php-5.5.11.tar.gz
-cd php-5.5.11/
+tar zxvf php-5.5.18.tar.gz
+cd php-5.5.18/
 ./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir=/usr --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl --enable-mbregex --enable-mbstring --with-mcrypt --enable-ftp --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --without-pear --with-gettext --disable-fileinfo --enable-opcache
 make ZEND_EXTRA_LIBS='-liconv'
 make install
@@ -284,7 +284,7 @@ request_terminate_timeout = 200
 EOF
 
 echo "Copy php-fpm init.d file......"
-cp $cur_dir/php-5.5.11/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+cp $cur_dir/php-5.5.18/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
 chmod +x /etc/init.d/php-fpm
 
 cp $cur_dir/lnmp /root/lnmp
